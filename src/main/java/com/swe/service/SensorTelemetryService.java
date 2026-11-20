@@ -15,6 +15,7 @@ public class SensorTelemetryService {
 
     private final SensorLogRepository sensorLogRepository;
     private final DeviceRepository deviceRepository;
+    private final AlertService alertService;
 
     @Transactional
     public void processTelemetry(TelemetryReq req) {
@@ -29,5 +30,7 @@ public class SensorTelemetryService {
                 .build();
 
         sensorLogRepository.save(log);
+
+        alertService.evaluateAndRecordAlert(device, req.getPpm());
     }
 }
