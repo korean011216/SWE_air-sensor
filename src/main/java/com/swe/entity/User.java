@@ -23,9 +23,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    // 한 사람이 여러 기기 + 회원 탈퇴하면 전부 삭제 + 특정 기기 제거하면 JPA가 자동 DELETE
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Device> devices = new ArrayList<>();
 
+    // 다른 파일에서 User객체 생성할 때 실수 줄이고 필요한 값만 채울 수 있게
     @Builder
     public User(String email, String password, String name) {
         this.email = email;
