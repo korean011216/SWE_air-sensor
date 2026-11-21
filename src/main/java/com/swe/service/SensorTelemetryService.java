@@ -4,10 +4,12 @@ import com.swe.dto.TelemetryBroadcastDto;
 import com.swe.dto.TelemetryReq;
 import com.swe.entity.Device;
 import com.swe.entity.SensorLog;
+import com.swe.enums.AlertLevel;
+import com.swe.event.TelemetryBroadcastEvent;
 import com.swe.repository.DeviceRepository;
 import com.swe.repository.SensorLogRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,7 @@ public class SensorTelemetryService {
     private final SensorLogRepository sensorLogRepository;
     private final DeviceRepository deviceRepository;
     private final AlertService alertService;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void processTelemetry(TelemetryReq req) {
@@ -33,7 +35,7 @@ public class SensorTelemetryService {
                 .build();
 
         SensorLog savedLog = sensorLogRepository.save(log);
-        String alertLevel = alertService.evaluateAndRecordAlert(device, req.getPpm());
+        AlertLevel alertLevel = alertService.evaluateAndRecordAlert(device, req.getPpm());
 
         TelemetryBroadcastDto payload = TelemetryBroadcastDto.builder()
                 .deviceId(device.getId())
@@ -46,6 +48,6 @@ public class SensorTelemetryService {
                 .timestamp(savedLog.getCreatedAt())
                 .build();
 
-        messagingTemplate.convertAndSend("/topic/telemetry", payload);
+        eventPublisher.publishEvent(new TelemetryBroadcastEvent(payload));
     }
 }

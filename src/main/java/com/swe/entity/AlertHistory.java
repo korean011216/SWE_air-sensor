@@ -1,5 +1,6 @@
 package com.swe.entity;
 
+import com.swe.enums.AlertLevel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,13 +17,14 @@ public class AlertHistory extends BaseTimeEntity {
     private Device device;
 
     @Column(nullable = false)
-    private String alertLevel; // "CAUTION" 또는 "DANGER"
+    @Enumerated(EnumType.STRING)
+    private AlertLevel alertLevel;
 
     @Column(nullable = false)
     private double recordedPpm; // 경보 발생 당시의 수치
 
     @Builder
-    public AlertHistory(Device device, String alertLevel, double recordedPpm) {
+    public AlertHistory(Device device, AlertLevel alertLevel, double recordedPpm) {
         this.device = device;
         this.alertLevel = alertLevel;
         this.recordedPpm = recordedPpm;

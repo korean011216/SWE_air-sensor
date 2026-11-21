@@ -18,7 +18,7 @@ public class Device extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String macAddress; // 기기 고유 식별자
 
-    private String name; // 장소
+    private String name; // 기기 별칭 (장소)
 
     @OneToOne(mappedBy = "device", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ThresholdConfig thresholdConfig;

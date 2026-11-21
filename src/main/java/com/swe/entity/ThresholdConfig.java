@@ -3,6 +3,8 @@ package com.swe.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+// 임계치 설정
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

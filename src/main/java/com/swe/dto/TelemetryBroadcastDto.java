@@ -1,5 +1,6 @@
 package com.swe.dto;
 
+import com.swe.enums.AlertLevel;
 import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
@@ -13,6 +14,6 @@ public class TelemetryBroadcastDto {
     private final double ppm;
     private final double temperature;
     private final double humidity;
-    private final String alertLevel; // "NORMAL", "CAUTION", "DANGER"
+    private final AlertLevel alertLevel;
     private final LocalDateTime timestamp;
 }
