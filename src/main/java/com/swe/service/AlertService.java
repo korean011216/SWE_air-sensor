@@ -15,12 +15,11 @@ public class AlertService {
     private final AlertHistoryRepository alertHistoryRepository;
 
     @Transactional
-    public void evaluateAndRecordAlert(Device device, double currentPpm) {
+    public String evaluateAndRecordAlert(Device device, double currentPpm) {
         ThresholdConfig config = device.getThresholdConfig();
 
-        // 임계치가 미설정된 기기거나 주의 수치 미만이면 즉시 종료
         if (config == null || currentPpm < config.getCautionPpm()) {
-            return;
+            return "NORMAL";
         }
 
         String alertLevel = (currentPpm >= config.getDangerPpm()) ? "DANGER" : "CAUTION";
@@ -32,5 +31,6 @@ public class AlertService {
                 .build();
 
         alertHistoryRepository.save(alert);
+        return alertLevel;
     }
 }
