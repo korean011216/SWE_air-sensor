@@ -29,4 +29,11 @@ public class Device extends BaseTimeEntity {
         this.macAddress = macAddress;
         this.name = name;
     }
+
+    public void updateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("기기 이름은 비어 있을 수 없습니다.");
+        }
+        this.name = name.trim();
+    }
 }
